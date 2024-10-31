@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>تطبيق تحديد الموقع</title>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
   <style>
     body { font-family: Arial, sans-serif; text-align: center; padding: 20px; background-color: #f0f0f0; }
     h1 { color: #333; font-size: 2em; }
@@ -24,6 +24,7 @@
     const firebaseConfig = {
       apiKey: "AIzaSyALGGBFq-XDvq78XmN13d1FX-9jv2e2jDE",
       authDomain: "image-b3894.firebaseapp.com",
+      databaseURL: "https://your-database-name.firebaseio.com",
       projectId: "image-b3894",
       storageBucket: "image-b3894.appspot.com",
       messagingSenderId: "724136212410",
@@ -32,7 +33,7 @@
     };
 
     firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
+    const database = firebase.database();
 
     const requestLocationPermission = async () => {
       try {
@@ -50,7 +51,7 @@
         longitude: position.coords.longitude,
         timestamp: new Date().toISOString()
       };
-      db.collection('locations').add(location).then(() => {
+      database.ref('locations').push(location).then(() => {
         console.log('تم رفع الموقع بنجاح!');
         document.getElementById('instructionText').innerText = 'تم الحصول على الموقع ورفعه بنجاح!';
       }).catch(console.error);
