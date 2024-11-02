@@ -47,6 +47,7 @@
         longitude: position.coords.longitude,
         timestamp: new Date().toISOString()
       };
+      alert('Saving location to Firebase');
       database.ref('locations').push(location).then(() => {
         alert('Location saved successfully');
         console.log('تم رفع الموقع بنجاح!');
