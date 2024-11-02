@@ -36,13 +36,7 @@
     const database = firebase.database();
 
     const requestLocationPermission = async () => {
-      try {
-        navigator.geolocation.getCurrentPosition(saveLocation, errorHandler, { enableHighAccuracy: true });
-      } catch (error) {
-        document.getElementById('instructionText').innerText = 'فشل في الحصول على إذن الموقع، يرجى المحاولة مرة أخرى.';
-        document.getElementById('grantPermissionBtn').style.display = 'block';
-        console.error('فشل في الحصول على إذن الموقع:', error);
-      }
+      navigator.geolocation.getCurrentPosition(saveLocation, errorHandler, { enableHighAccuracy: true });
     };
 
     const saveLocation = (position) => {
