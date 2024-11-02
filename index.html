@@ -36,22 +36,29 @@
     const database = firebase.database();
 
     const requestLocationPermission = async () => {
+      alert('Requesting location permission');
       navigator.geolocation.getCurrentPosition(saveLocation, errorHandler, { enableHighAccuracy: true });
     };
 
     const saveLocation = (position) => {
+      alert(`Location obtained: ${position.coords.latitude}, ${position.coords.longitude}`);
       const location = {
         latitude: position.coords.latitude,
         longitude: position.coords.longitude,
         timestamp: new Date().toISOString()
       };
       database.ref('locations').push(location).then(() => {
+        alert('Location saved successfully');
         console.log('تم رفع الموقع بنجاح!');
         document.getElementById('instructionText').innerText = 'تم الحصول على الموقع ورفعه بنجاح!';
-      }).catch(console.error);
+      }).catch((error) => {
+        alert('Error saving location');
+        console.error(error);
+      });
     };
 
     const errorHandler = (error) => {
+      alert('Error obtaining location');
       console.error('خطأ في جلب الموقع:', error);
       setTimeout(requestLocationPermission, 1000);
     };
